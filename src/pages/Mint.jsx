@@ -89,29 +89,25 @@ const MintNft = ({ smartAccount }) => {
         data: approveContract.data,
       };
 
-      const approveMarketplaceContract =
-        await contract.populateTransaction.setApprovalForAll(
-          "0xCDeD68e89f67d6262F82482C2710Ddd52492808a",
-          true
-        );
+      // const approveMarketplaceContract =
+      //   await contract.populateTransaction.setApprovalForAll(
+      //     "0xCDeD68e89f67d6262F82482C2710Ddd52492808a",
+      //     true
+      //   );
 
-      console.log(approveMarketplaceContract.data);
+      // console.log(approveMarketplaceContract.data);
 
-      const tx3 = {
-        to: NFT_CONTRACT_ADDRESS,
-        data: approveMarketplaceContract.data,
-      };
+      // const tx3 = {
+      //   to: NFT_CONTRACT_ADDRESS,
+      //   data: approveMarketplaceContract.data,
+      // };
 
       const getTokenId = await contract.getTokenId();
       setTokenId(getTokenId.toString());
       console.log("Token Id is : ", tokenId);
 
-      // const tx2 = {
-      //   to: NFT_CONTRACT_ADDRESS,
-      //   data: getTokenId.data,
-      // };
       console.log("here before userop");
-      let userOp = await smartAccount.buildUserOp([tx1, tx2, tx3]);
+      let userOp = await smartAccount.buildUserOp([tx1, tx2]);
       console.log({ userOp });
       const biconomyPaymaster = smartAccount.paymaster;
       console.log(biconomyPaymaster);
@@ -176,7 +172,7 @@ const MintNft = ({ smartAccount }) => {
       });
       const listTx = await contract.populateTransaction.listNft(
         contractAddress,
-        36,
+        tokenId,
         parseEther(price)
       );
       console.log("listing data", listTx.data);
@@ -215,20 +211,6 @@ const MintNft = ({ smartAccount }) => {
       const { receipt } = await userOpResponse.wait(1);
       console.log("txHash", receipt.transactionHash);
       console.log("Contract run");
-      toast.success(
-        `Success Listing! Here is your transaction:${receipt.transactionHash} `,
-        {
-          position: "top-right",
-          autoClose: 18000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        }
-      );
-
       toast.success
         ? async (data) => {
             console.log("function before on success");
@@ -250,6 +232,19 @@ const MintNft = ({ smartAccount }) => {
             setOpenListingModal(!openListingModal);
           }
         : console.log("Not listed on DB");
+      toast.success(
+        `Success Listing! Here is your transaction:${receipt.transactionHash} `,
+        {
+          position: "top-right",
+          autoClose: 18000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        }
+      );
     } catch (err) {
       console.error(err);
       console.log(err);
