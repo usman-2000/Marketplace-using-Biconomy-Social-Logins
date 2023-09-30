@@ -44,7 +44,7 @@ const MintNft = ({ smartAccount }) => {
 
   useEffect(() => {
     setOwnerAddress(localStorage.getItem("address"));
-    setTokenIdForListing(tokenId - 1);
+    // setTokenIdForListing(tokenId - 1);
   });
 
   const handleMint = async (e) => {
@@ -52,6 +52,11 @@ const MintNft = ({ smartAccount }) => {
     const contract = new ethers.Contract(
       NFT_CONTRACT_ADDRESS,
       NFT_CONTRACT_ABI,
+      smartAccount.provider
+    );
+    const MarketplaceContract = new ethers.Contract(
+      MARKETPLACE_CONTRACT_ADDRESS,
+      MARKETPLACE_CONTRACT_ABI,
       smartAccount.provider
     );
     try {
@@ -69,7 +74,7 @@ const MintNft = ({ smartAccount }) => {
         ownerAddress,
         ipfsHash
       );
-      console.log(minTx.data);
+      console.log("minting tx", minTx.data);
 
       const tx1 = {
         to: NFT_CONTRACT_ADDRESS,
@@ -89,6 +94,19 @@ const MintNft = ({ smartAccount }) => {
         data: approveContract.data,
       };
 
+      // const lisTx = await MarketplaceContract.populateTransaction.listNft(
+      //   contractAddress,
+      //   40,
+      //   parseEther(price)
+      // );
+      // console.log("Listing data ", lisTx.data);
+
+      // const tx3 = {
+      //   to: MARKETPLACE_CONTRACT_ADDRESS,
+      //   data: lisTx.data,
+      //   value: parseEther("0.0026"),
+      // };
+
       // const approveMarketplaceContract =
       //   await contract.populateTransaction.setApprovalForAll(
       //     "0xCDeD68e89f67d6262F82482C2710Ddd52492808a",
@@ -103,8 +121,8 @@ const MintNft = ({ smartAccount }) => {
       // };
 
       const getTokenId = await contract.getTokenId();
-      setTokenId(getTokenId.toString());
-      console.log("Token Id is : ", tokenId);
+      // setTokenId(getTokenId.toString());
+      // console.log("Token Id is : ", tokenId);
 
       console.log("here before userop");
       let userOp = await smartAccount.buildUserOp([tx1, tx2]);
@@ -145,6 +163,32 @@ const MintNft = ({ smartAccount }) => {
           theme: "dark",
         }
       );
+      setTokenId(getTokenId.toString());
+      console.log("Token Id is : ", Number(tokenId) + 1);
+      setTokenIdForListing(Number(tokenId) + 1);
+      // toast.success
+      //   ? async (data) => {
+      //       console.log("function before on success");
+      //       await axios
+      //         .post("http://localhost:5004/nfts/createnft", {
+      //           title,
+      //           price,
+      //           description,
+      //           ipfsHash,
+      //           ownerAddress,
+      //           contractAddress,
+      //           sellerAddress,
+      //           tokenId,
+      //           active,
+      //         })
+      //         .then((result) => console.log(result));
+      //       console.log("Function on success completed");
+      //       setListed(true);
+      //       setOpenListingModal(!openListingModal);
+      //     }
+      //   : console.log("Not listed on DB");
+
+      // window.location.reload();
       setOpenListingModal(!openListingModal);
     } catch (err) {
       console.error(err);
@@ -172,7 +216,7 @@ const MintNft = ({ smartAccount }) => {
       });
       const listTx = await contract.populateTransaction.listNft(
         contractAddress,
-        tokenId,
+        tokenIdForListing,
         parseEther(price)
       );
       console.log("listing data", listTx.data);
