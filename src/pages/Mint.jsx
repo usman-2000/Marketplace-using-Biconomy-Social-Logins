@@ -227,7 +227,7 @@ const MintNft = ({ smartAccount }) => {
       const tx1 = {
         to: MARKETPLACE_CONTRACT_ADDRESS,
         data: listTx.data,
-        value: parseEther("0.0030"),
+        value: parseEther("0.0025"),
       };
       console.log("here before userop");
       let userOp = await smartAccount.buildUserOp([tx1]);
@@ -255,27 +255,6 @@ const MintNft = ({ smartAccount }) => {
       const { receipt } = await userOpResponse.wait(1);
       console.log("txHash", receipt.transactionHash);
       console.log("Contract run");
-      toast.success
-        ? async (data) => {
-            console.log("function before on success");
-            await axios
-              .post("http://localhost:5004/nfts/createnft", {
-                title,
-                price,
-                description,
-                ipfsHash,
-                ownerAddress,
-                contractAddress,
-                sellerAddress,
-                tokenId,
-                active,
-              })
-              .then((result) => console.log(result));
-            console.log("Function on success completed");
-            setListed(true);
-            setOpenListingModal(!openListingModal);
-          }
-        : console.log("Not listed on DB");
       toast.success(
         `Success Listing! Here is your transaction:${receipt.transactionHash} `,
         {
@@ -289,6 +268,24 @@ const MintNft = ({ smartAccount }) => {
           theme: "dark",
         }
       );
+      async (data) => {
+        console.log("function before on success");
+        await axios
+          .post("http://localhost:5004/nfts/createnft", {
+            title,
+            price,
+            description,
+            ipfsHash,
+            ownerAddress,
+            contractAddress,
+            sellerAddress,
+            tokenId,
+            active,
+          })
+          .then((result) => console.log(result));
+        console.log("Function on success completed");
+        // setOpenListingModal(!openListingModal);
+      };
     } catch (err) {
       console.error(err);
       console.log(err);
@@ -389,7 +386,11 @@ const MintNft = ({ smartAccount }) => {
           />
 
           <label>Upload Image</label>
-          <input type={"file"} onChange={OnChangeFile}></input>
+          <input
+            className={styleMint.uploadImage}
+            type={"file"}
+            onChange={OnChangeFile}
+          ></input>
           <p>{message}</p>
           <button
             type="submit"

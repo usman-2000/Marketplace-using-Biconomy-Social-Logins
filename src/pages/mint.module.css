@@ -31,6 +31,10 @@
   color: black;
 }
 
+.uploadImage {
+  color: white !important;
+}
+
 .mint_form form input:focus {
   outline-style: solid;
 }
