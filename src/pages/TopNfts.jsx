@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import styleNftShowcase from "./TopNfts.module.css";
 import axios from "axios";
+import Link from "next/link";
 // import nftImage from "../utilities/nftImage.png";
 
 const NFTShowcaseList = () => {
@@ -69,11 +70,11 @@ const NFTShowcaseList = () => {
                     ) : (
                       ""
                     )}
-                    {/* <Link to={`/${e._id}`}> */}
-                    <button className="linear rounded-[20px] bg-blue-700 px-4 py-2 text-base font-medium text-white transition duration-200 hover:bg-yellow-700 active:bg-blue-700">
-                      Details
-                    </button>
-                    {/* </Link> */}
+                    <Link href={`${e._id}`}>
+                      <button className="linear rounded-[20px] bg-blue-700 px-4 py-2 text-base font-medium text-white transition duration-200 hover:bg-yellow-700 active:bg-blue-700">
+                        Details
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>

@@ -87,7 +87,7 @@ const MintNft = ({ smartAccount }) => {
           true
         );
 
-      console.log(approveContract.data);
+      console.log("Approved data ", approveContract.data);
 
       const tx2 = {
         to: NFT_CONTRACT_ADDRESS,
@@ -266,10 +266,7 @@ const MintNft = ({ smartAccount }) => {
           draggable: true,
           progress: undefined,
           theme: "dark",
-        }
-      );
-      async (data) => {
-        console.log("function before on success");
+        },
         await axios
           .post("http://localhost:5004/nfts/createnft", {
             title,
@@ -282,10 +279,9 @@ const MintNft = ({ smartAccount }) => {
             tokenId,
             active,
           })
-          .then((result) => console.log(result));
-        console.log("Function on success completed");
-        // setOpenListingModal(!openListingModal);
-      };
+          .then((result) => console.log(result))
+      );
+      setOpenListingModal(!openListingModal);
     } catch (err) {
       console.error(err);
       console.log(err);
