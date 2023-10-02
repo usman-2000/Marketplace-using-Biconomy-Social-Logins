@@ -166,6 +166,7 @@ const MintNft = ({ smartAccount }) => {
       setTokenId(getTokenId.toString());
       console.log("Token Id is : ", Number(tokenId) + 1);
       setTokenIdForListing(Number(tokenId) + 1);
+
       // toast.success
       //   ? async (data) => {
       //       console.log("function before on success");
@@ -216,12 +217,12 @@ const MintNft = ({ smartAccount }) => {
       });
       const listTx = await contract.populateTransaction.listNft(
         contractAddress,
-        tokenIdForListing,
-        parseEther(price)
+        tokenId,
+        parseEther(price.toString())
       );
       console.log("listing data", listTx.data);
       console.log("Token Id = ", tokenId);
-      console.log("Price", parseEther(price));
+      console.log("Price", parseEther(price.toString()));
       console.log("Contract Address", contractAddress);
 
       const tx1 = {
@@ -281,6 +282,7 @@ const MintNft = ({ smartAccount }) => {
           })
           .then((result) => console.log(result))
       );
+
       setOpenListingModal(!openListingModal);
     } catch (err) {
       console.error(err);
